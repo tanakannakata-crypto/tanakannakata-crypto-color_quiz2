@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12択色彩クイズ</title>
+<style>
+  body {
+    font-family: sans-serif;
+    background: #f4f5f8;
+    margin: 0;
+    padding: 30px 15px;
+    color: #333;
+  }
+  .container {
+    max-width: 650px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 3px 15px #0001;
+  }
+  h1 { text-align: center; font-size: 25px; }
+  .question {
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.7;
+    margin: 25px 0;
+  }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .option {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    background: white;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: left;
+  }
+  .option:hover { background: #f0f3fa; }
+  .option.selected {
+    border: 2px solid #477bd1;
+    background: #eaf1ff;
+  }
+  .option:disabled { cursor: default; }
+  .correct {
+    background: #d9f2df !important;
+    border-color: #29964b !important;
+  }
+  .incorrect {
+    background: #ffe0e0 !important;
+    border-color: #d44 !important;
+  }
+  #result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 9px;
+    display: none;
+    line-height: 1.7;
+  }
+  .buttons { margin-top: 20px; }
+  button.main {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 9px;
+    background: #477bd1;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  button.main:disabled {
+    background: #aaa;
+    cursor: default;
+  }
+  @media(max-width: 450px) {
+    .options { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>色彩検定 12択クイズ</h1>
+
+  <p id="progress">第1問</p>
+
+  <div class="question">
+    平安時代に、冬から春にかけての色として愛好された色はどれ？
+  </div>
+
+  <div class="options" id="options"></div>
+
+  <div id="result"></div>
+
+  <div class="buttons">
+    <button class="main" id="submit" disabled>回答する</button>
+    <button class="main" id="next" style="display:none">
+      もう一度挑戦
+    </button>
+  </div>
+</div>
+
+<script>
+const correctAnswer = "紅梅色";
+
+const choices = [
+  "紅梅色",
+  "桜色",
+  "桃色",
+  "薄紅梅",
+  "梅鼠",
+  "撫子色",
+  "一斤染",
+  "退紅",
+  "蘇芳",
+  "茜色",
+  "曙色",
+  "鴇色"
+];
+
+let selected = null;
+let answered = false;
+
+function shuffle(array) {
+  const result = [...array];
+
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+
+  return result;
+}
+
+function createQuestion() {
+  selected = null;
+  answered = false;
+
+  const options = document.getElementById("options");
+  const result = document.getElementById("result");
+  const submit = document.getElementById("submit");
+  const next = document.getElementById("next");
+
+  options.innerHTML = "";
+  result.style.display = "none";
+  submit.disabled = true;
+  submit.style.display = "block";
+  next.style.display = "none";
+
+  shuffle(choices).forEach((choice, index) => {
+    const button = document.createElement("button");
+
+    button.className = "option";
+    button.textContent = `${index + 1}. ${choice}`;
+
+    button.onclick = () => {
+      if (answered) return;
+
+      selected = choice;
+
+      document.querySelectorAll(".option").forEach(b => {
+        b.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+      submit.disabled = false;
+    };
+
+    options.appendChild(button);
+  });
+}
+
+function checkAnswer() {
+  if (!selected || answered) return;
+
+  answered = true;
+
+  const buttons = document.querySelectorAll(".option");
+
+  buttons.forEach(button => {
+    button.disabled = true;
+
+    const choice = button.textContent.replace(/^\d+\.\s*/, "");
+
+    if (choice === correctAnswer) {
+      button.classList.add("correct");
+    } else if (choice === selected) {
+      button.classList.add("incorrect");
+    }
+  });
+
+  const result = document.getElementById("result");
+  result.style.display = "block";
+
+  if (selected === correctAnswer) {
+    result.style.background = "#d9f2df";
+    result.innerHTML =
+      "<strong>正解！</strong><br>正解は紅梅色（こうばいいろ）です。";
+  } else {
+    result.style.background = "#ffe0e0";
+    result.innerHTML =
+      "<strong>不正解。</strong><br>正解は紅梅色（こうばいいろ）です。";
+  }
+
+  document.getElementById("submit").style.display = "none";
+  document.getElementById("next").style.display = "block";
+}
+
+document.getElementById("submit").onclick = checkAnswer;
+document.getElementById("next").onclick = createQuestion;
+
+createQuestion();
+</script>
+
+</body>
+</html>
