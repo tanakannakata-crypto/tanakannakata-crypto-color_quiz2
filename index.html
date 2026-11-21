@@ -134,26 +134,25 @@
       color: var(--muted);
       margin-bottom: 8px;
       gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .score-live {
+      font-weight: 700;
+      color: var(--text);
     }
 
     .question-box {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 10px;
-      padding: 12px 14px;
+      padding: 14px 16px;
       margin-bottom: 12px;
     }
 
-    .q-num {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-
     .q-text {
-      font-size: 0.98rem;
-      line-height: 1.5;
+      font-size: 1rem;
+      line-height: 1.55;
       font-weight: 600;
       margin: 0;
     }
@@ -234,11 +233,12 @@
     }
 
     .score-big {
-      font-size: 1.8rem;
+      font-size: 1.65rem;
       font-weight: 800;
       color: var(--primary);
       text-align: center;
       margin: 14px 0;
+      line-height: 1.35;
     }
 
     .review-list {
@@ -288,11 +288,10 @@
     <div id="quiz-screen" class="hidden">
       <div class="meta-bar">
         <span id="progress-text">第 1 / 10 問</span>
-        <span id="score-live">正解: 0</span>
+        <span class="score-live" id="score-live">正解: 0 / 0問 (0.0%)</span>
       </div>
 
       <div class="question-box">
-        <div class="q-num" id="q-label">第1問</div>
         <p class="q-text" id="q-text"></p>
       </div>
 
@@ -315,288 +314,25 @@
 
   <script>
     const QUIZ_DATA = [
-      { id: 1, label: "第1問", q: "平安時代に最も愛好された色は？", a: "桜色" },
-      { id: 2, label: "第2問", q: "装飾品などで特に珍重された色は？", a: "珊瑚色" },
-      { id: 3, label: "第3問", q: "平安時代に、冬から春にかけての季節の色として愛好された色は？", a: "紅梅色" },
-      { id: 4, label: "第4問", q: "日本の山野に自生する植物の根を原料とした染料で染めた色は？", a: "茜色" },
-      { id: 5, label: "第5問", q: "硫化水銀を原料とする銀朱の色を表す和色名は？", a: "朱色" },
-      { id: 6, label: "Q6", q: "英語ではブリックレッドと呼ばれる色は？", a: "煉瓦色" },
-      { id: 7, label: "Q7", q: "大判・小判の形容にも使われた色は？", a: "山吹色" },
-      { id: 8, label: "Q8", q: "江戸時代に身近な鳥の羽毛を表した色は？", a: "鶯色" },
-      { id: 9, label: "Q9", q: "常緑樹であり、長寿の象徴とされた植物に関係する色は？", a: "松葉色" },
-      { id: 10, label: "Q10", q: "平安時代には秋の季節を表していた色は？", a: "栗色" },
-      { id: 11, label: "Q11", q: "日本画で、水酸化鉄を含む泥土から作られた色は？", a: "黄土色" },
-      { id: 12, label: "Q12", q: "種子を粉末にして練り上げる食品の色に由来する色は？", a: "芥子色" },
-      { id: 13, label: "Q13", q: "春に芽吹く若葉を思わせ、新鮮さや若々しさを象徴する伝統色は？", a: "萌黄" },
-      { id: 14, label: "Q14", q: "植物の成長段階の若さを表す色は？", a: "若竹色" },
-      { id: 15, label: "Q15", q: "平安時代には日本で「秘色」と呼ばれていたものに由来する色は？", a: "青磁色" },
-      { id: 16, label: "Q16", q: "平安時代に用いられた、明るい藍染めの色は？", a: "浅葱色" },
-      { id: 17, label: "Q17", q: "天候によって見え方が変わり、晴天時の空を表す色は？", a: "空色" },
-      { id: 18, label: "Q18", q: "人類最古の植物染料の一つとされた色は？", a: "藍色" },
-      { id: 19, label: "Q19", q: "古代インドや中国で珍重され、仏教において七宝の一つに数えられるものに由来する色は？", a: "瑠璃色" },
-      { id: 20, label: "Q20", q: "初夏に咲くアヤメ科に由来する色は？", a: "杜若色" },
-      { id: 21, label: "Q21", q: "旧暦の初秋の気配を感じさせる色は？", a: "桔梗色" },
-      { id: 22, label: "Q22", q: "藍銅鉱という鉱物を原料とする、日本画の代表的な絵の具の色は？", a: "群青色" },
-      { id: 23, label: "Q23", q: "特定の野菜を意味する色は？", a: "茄子紺" },
-      { id: 24, label: "Q24", q: "化学染料が登場する以前から使われていた伝統的な色名で、鮮やかな色調を表す色は？", a: "牡丹色" },
-      { id: 25, label: "Q25", q: "b22の色は？", a: "菖蒲色" },
-      { id: 26, label: "Q26", q: "自然素材志向の時代風潮から一般化した、加工していない繊維の色を表す色は？", a: "生成色" },
-      { id: 27, label: "Q27", q: "赤ワインのような色を表す英語の色は？", a: "ワインレッド" },
-      { id: 28, label: "Q28", q: "元はクラレットと呼ばれていた色は？", a: "ボルドー" },
-      { id: 29, label: "Q29", q: "欧米で乳幼児服の標準色で、化粧品のカラーラインナップでも見られる色は？", a: "ベビーピンク" },
-      { id: 30, label: "Q30", q: "中南米のサボテンに寄生する昆虫から採取された色は？", a: "カーマイン" },
-      { id: 31, label: "Q31", q: "硫化水銀を原料とする人造朱に由来する外来色名は？", a: "バーミリオン" },
-      { id: 32, label: "Q32", q: "ペルシャ語の織物に由来する色は？", a: "スカーレット" },
-      { id: 33, label: "Q33", q: "魚の切り身の色として最も特徴がある色は？", a: "サーモンピンク" },
-      { id: 34, label: "Q34", q: "1502年にコロンブスがヨーロッパへ持ち帰ったものに由来する色は？", a: "チョコレート" },
-      { id: 35, label: "Q35", q: "日本語では花の色を表す一方、英語やフランス語では果実の果肉の色を表す色は？", a: "ピーチ" },
-      { id: 36, label: "Q36", q: "17世紀半ば頃に色名となり、西洋で伝統的に親しまれてきた、ある植物の花に由来する色は？", a: "マリーゴールド" },
-      { id: 37, label: "Q37", q: "13世紀頃のフランス語で、未加工・未漂白・未染色の毛織物を指していた色は？", a: "ベージュ" },
-      { id: 38, label: "Q38", q: "19世紀半ば、インドに駐在していたイギリス軍の部隊が軍服に採用した色は？", a: "カーキー" },
-      { id: 39, label: "Q39", q: "イカが墨を出す墨汁嚢（のう）からつくられた色は？", a: "セピア" },
-      { id: 40, label: "Q40", q: "乳製品として広く普及している色は？", a: "クリームイエロー" },
-      { id: 41, label: "Q41", q: "大西洋上の諸島が原産地である鳥の羽毛に由来する色は？", a: "カナリヤ" },
-      { id: 42, label: "Q42", q: "実験によって既に発見されていたが、19世紀中頃になってようやくヨーロッパの画家たちが絵の具として使用できるようになった色は？", a: "コバルトグリーン" },
-      { id: 43, label: "Q43", q: "古い時代には単に「明るい色」という意味だった色は？", a: "ブロンド" },
-      { id: 44, label: "Q44", q: "クロームやカドミウムを用いた新しい絵の具に由来する色は？", a: "レモンイエロー" },
-      { id: 45, label: "Q45", q: "旧約聖書の創世記にも出てくる色は？", a: "オリーブ" },
-      { id: 46, label: "Q46", q: "その由来となった植物の「生の実」と「葉」のどちらを指しているのか分かっていない色は？", a: "オリーブグリーン" },
-      { id: 47, label: "Q47", q: "緑の宝石に由来する色は？", a: "エメラルドグリーン" },
-      { id: 48, label: "Q48", q: "トルコ石として知られる宝石に由来する色は？", a: "ターコイズブルー" },
-      { id: 49, label: "Q49", q: "「スカイ」または「スカイカラー」と呼ばれていた色は？", a: "スカイブルー" },
-      { id: 50, label: "Q50", q: "海の色の形容に用いる色は？", a: "コバルトブルー" },
-      { id: 51, label: "Q51", q: "フランスのギネが1859年に製造特許を登録した水酸化クロームをもとに作られた色は？", a: "ビリジアン" },
-      { id: 52, label: "Q52", q: "ヨーロッパ諸国の水夫や水兵などの海軍従事者が伝統的に着用していた制服に由来する色は？", a: "マリンブルー" },
-      { id: 53, label: "Q53", q: "古代ギリシャ語で「暗い」という意味の言葉から派生した色は？", a: "シアン" },
-      { id: 54, label: "Q54", q: "欧米で乳幼児服の標準色で、聖母マリアに関係する色は？", a: "ベビーブルー" },
-      { id: 55, label: "Q55", q: "イギリス海軍の制服の色は？", a: "ネービーブルー" },
-      { id: 56, label: "Q56", q: "ラピスラズリの粉末が、海の彼方から渡ってきたことに由来する色は？", a: "ウルトラマリンブルー" },
-      { id: 57, label: "Q57", q: "フランス語で「アオイ」を意味する色は？", a: "モーブ" },
-      { id: 58, label: "Q58", q: "古代ギリシャ語の「ポルフォラ」に由来する色は？", a: "パープル" },
-      { id: 59, label: "Q59", q: "イタリア統一戦争で同盟軍が勝利をおさめた戦場の地名を記念して名付けられた色は？", a: "マゼンタ" },
-      { id: 60, label: "Q60", q: "炭酸鉛の絵の具の名称としても用いられる色は？", a: "シルバーグレイ" },
-      { id: 61, label: "Q61", q: "スミレの花の色を表す色は？", a: "バイオレット" },
-      { id: 62, label: "Q62", q: "水浴の際の香水に用いられた色は？", a: "ラベンダー" },
-      { id: 63, label: "Q63", q: "古代ローマですでに装飾や工芸品に用いられていた素材に由来する色は？", a: "アイボリー" },
-      { id: 64, label: "Q64", q: "木炭や炭を意味する色は？", a: "チャコールグレー" },
-      { id: 65, label: "Q65", q: "体色は一見すると白く見えるものの、翼の内側や風切羽、尾羽などの色からとられた色は？", a: "鴇色" },
-      { id: 66, label: "Q66", q: "日本で「呉（くれ）」と呼んだ中国の地域から渡来した染料という意味に由来する色は？", a: "韓紅花" },
-      { id: 67, label: "Q67", q: "インドやマレー半島などを原産地とするマメ科植物の心材を原料とした色は？", a: "蘇芳" },
-      { id: 68, label: "Q68", q: "鳥の羽の色からとられた色名としては鶸色（ひわいろ）に次いで古い色は？", a: "鳶色" },
-      { id: 69, label: "Q69", q: "近世に葡萄の古い読み方が使われなくなったことで現在の漢字が当てられるようになった色は？", a: "海老茶" },
-      { id: 70, label: "Q70", q: "ベンガル地方で産出する天然の酸化鉄からつくったものに由来する色は？", a: "弁柄色" },
-      { id: 71, label: "Q71", q: "黒みのある蘇芳の染色の色は？", a: "桧皮色" },
-      { id: 72, label: "Q72", q: "酒類の色を形容するときによく使われる色は？", a: "琥珀色" },
-      { id: 73, label: "Q73", q: "緑を染めるための藍の下染めによく用いられてきた色は？", a: "刈安色" },
-      { id: 74, label: "Q74", q: "古代に皇太子の礼服として制定され、長い間、臣下の服色としては使えない禁色とされていた色は？", a: "黄丹" },
-      { id: 75, label: "Q75", q: "天然の土からつくる絵の具の顔料として、中国の山西省州産の土に由来する色は？", a: "代赭" },
-      { id: 76, label: "Q76", q: "日本語の黄赤を代表する色は？", a: "柑子色" },
-      { id: 77, label: "Q77", q: "伝統的なものの中でも特に晩秋の季節感が濃厚な色は？", a: "朽葉色" },
-      { id: 78, label: "Q78", q: "今でも漬物のたくあんの色やカレー粉の原料などに使用されている色は？", a: "鬱金色" },
-      { id: 79, label: "Q79", q: "防虫効果があることから奈良時代から染め紙に用いられた色は？", a: "黄蘗色" },
-      { id: 80, label: "Q80", q: "小鳥の羽からとられた色は？", a: "鶸色" },
-      { id: 81, label: "Q81", q: "錆びた金属の肌のような色は？", a: "鉄色" },
-      { id: 82, label: "Q82", q: "物置部屋の暗がりや、その幕、あるいは関連する役人の衣服に由来するなど諸説がある色は？", a: "納戸色" },
-      { id: 83, label: "Q83", q: "『万葉集』にも詠みこまれた色は？", a: "海松色" },
-      { id: 84, label: "Q84", q: "常緑樹の葉のような色は？", a: "常盤色" },
-      { id: 85, label: "Q85", q: "石緑（せきりょく）や孔雀（くじゃく）石からつくられる色は？", a: "緑青色" },
-      { id: 86, label: "Q86", q: "芸者衆が好んだ着物の色に由来する色は？", a: "新橋色" },
-      { id: 87, label: "Q87", q: "糸や布が染料の甕（かめ）をちょっとのぞいただけという意味から名づけられた色は？", a: "甕覗き" },
-      { id: 88, label: "Q88", q: "染料の汁の中に糸がただようことを表していた色は？", a: "縹色" },
-      { id: 89, label: "Q89", q: "清少納言の『枕草子』の一節にも「めでたきもの」の典型としてその花が登場する色は？", a: "藤色" },
-      { id: 90, label: "Q90", q: "蜀山人（しょくさんじん）の狂歌や川柳にも詠まれた色は？", a: "江戸紫" },
-      { id: 91, label: "Q91", q: "近世に新しく生まれた色を「今〜」と呼ぶのに対し、伝統的な昔ながらの色は？", a: "古代紫" },
-      { id: 92, label: "Q92", q: "「しろがね」＋江戸時代に不吉なイメージを払拭して粋な流行色へと変えた色は？", a: "銀鼠" },
-      { id: 93, label: "Q93", q: "華美を禁じられた江戸時代に「四十八茶百鼠（しじゅうはっちゃひゃくねず）」として大流行した色は？", a: "茶鼠" },
-      { id: 94, label: "Q94", q: "後世の茶人のイメージから生まれた色は？", a: "利休鼠" },
-      { id: 95, label: "Q95", q: "昔、大掃除の道具に用いられて庶民生活の身近にあったものに由来する色は？", a: "煤竹色" },
-      { id: 96, label: "Q96", q: "花の名からとられた英語の名称としては最古のものとされた色は？", a: "ローズピンク" },
-      { id: 97, label: "Q97", q: "フランスのブルゴーニュ地方で生産されるワインに由来する色は？", a: "バーガンディー" },
-      { id: 98, label: "Q98", q: "イギリスのビクトリア朝でもてはやされた流行色で、「古い、昔の」を意味する、くすんだ色は？", a: "オールドローズ" },
-      { id: 99, label: "Q99", q: "日本語ではヒナゲシと呼ばれ、イギリスでは麦畑に自生するありふれた花に由来する色は？", a: "ポピーレッド" },
-      { id: 100, label: "Q100", q: "スペイン産の大粒の栗の名前に由来する色は？", a: "マルーン" },
-      { id: 101, label: "Q101", q: "イタリア語で「焼いた土」を意味し、素焼きの陶器などの色合いを指す色は？", a: "テラコッタ" },
-      { id: 102, label: "Q102", q: "イタリアのトスカナ地方の中心都市の土に由来する色は？", a: "バーントシェンナ" },
-      { id: 103, label: "Q103", q: "美しい土の採掘場として昔から有名なイタリア・トスカーナ地方の中心都市にちなんで名づけられた土を原料とし、フレスコ画に重要な「そのまま」の絵の具に由来する色は？", a: "ローシェンナ" },
-      { id: 104, label: "Q104", q: "「さらしていない」、「生の」＋「未加工の羊毛のような」色は？", a: "エクルベイジュ" },
-      { id: 105, label: "Q105", q: "琥珀のような色は？", a: "アンバー" },
-      { id: 106, label: "Q106", q: "そのまま＋ウンブリア地方の土という意味で、英米では家の壁によく用いられる色は？", a: "ローアンバー" },
-      { id: 107, label: "Q107", q: "ナポリの黄という意味で、ヴェスヴィアス火山の鉱物から作られたと信じられていた色は？", a: "ネープルスイエロー" },
-      { id: 108, label: "Q108", q: "カシやナラなどの樹皮から採取した液で獣皮をなめす際に使われる「なめし革」に由来する色は？", a: "タン" },
-      { id: 109, label: "Q109", q: "ルネッサンス期の盛期に聖人を表す光輪に使われた色は？", a: "ゴールデンイエロー" },
-      { id: 110, label: "Q110", q: "イタリア・ウンブリア地方の土を焼いてつくられた絵の具に由来する色は？", a: "バーントアンバー" },
-      { id: 111, label: "Q111", q: "フランス語で「輝かしい」という意味を含む色は？", a: "ジョンブリアン" },
-      { id: 112, label: "Q112", q: "フランスの修道院でつくられたリキュールが起源の色は？", a: "シャルトルーズグリーン" },
-      { id: 113, label: "Q113", q: "英語の名称としては最古のものの一つで、牧草に由来する色は？", a: "グラスグリーン" },
-      { id: 114, label: "Q114", q: "ハッカの油からつくった酒に由来する色は？", a: "ミントグリーン" },
-      { id: 115, label: "Q115", q: "酒の輸送や薬瓶などに関係した色は？", a: "ボトルグリーン" },
-      { id: 116, label: "Q116", q: "1880年代にエジプトの大河の名を冠して登場した色は？", a: "ナイルブルー" },
-      { id: 117, label: "Q117", q: "「木の葉」という意味を持つ色は？", a: "リーフグリーン" },
-      { id: 118, label: "Q118", q: "日本では赤だが、英語ではグリーンの色は？", a: "アップルグリーン" },
-      { id: 119, label: "Q119", q: "日本語で孔雀石と呼ばれる鉱石からつくられ、古代エジプトでは目を守るまじないとして目のまわりに塗ったことがアイラインの始まりだとされる色は？", a: "マラカイトグリーン" },
-      { id: 120, label: "Q120", q: "孔雀の羽に由来する色は？", a: "ピーコックグリーン" },
-      { id: 121, label: "Q121", q: "19世紀に錫酸コバルト化合物からつくられた色は？", a: "セルリアンブルー" },
-      { id: 122, label: "Q122", q: "ドイツ東部の州であるザクセンの英語名に由来し、「ザクセン人の青」という意味を持ち、藍染めの名称として広く一般に用いられるようになり、主に繊維製品のための色名となった色は？", a: "サックスブルー" },
-      { id: 123, label: "Q123", q: "ネービーブルーよりも暗い紺系で、20世紀初めに登場した流行色の色は？", a: "ミッドナイトブルー" },
-      { id: 124, label: "Q124", q: "藤の英語名の色は？", a: "ウイスタリア" },
-      { id: 125, label: "Q125", q: "花の色からとられた薄紫の色は？", a: "ライラック" },
-      { id: 126, label: "Q126", q: "西洋諸国で屋根の瓦として使われる粘板岩の薄板に由来する色は？", a: "スレートグレイ" },
-      { id: 127, label: "Q127", q: "油を燃焼させてできた煤からとられた色は？", a: "ランプブラック" }
-    ];
-
-    const ALL_ANSWERS = Array.from(new Set(QUIZ_DATA.map(item => item.a)));
-
-    let selectedCount = 10;
-    let sessionQuestions = [];
-    let currentIdx = 0;
-    let score = 0;
-    let wrongItems = [];
-
-    const startScreen = document.getElementById("start-screen");
-    const quizScreen = document.getElementById("quiz-screen");
-    const resultScreen = document.getElementById("result-screen");
-
-    const countButtons = document.querySelectorAll(".count-btn");
-    countButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        countButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        selectedCount = Number(btn.dataset.count);
-      });
-    });
-
-    function shuffle(arr) {
-      const copy = [...arr];
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-      return copy;
-    }
-
-    function buildChoices(correctAnswer) {
-      const distractors = shuffle(ALL_ANSWERS.filter(ans => ans !== correctAnswer)).slice(0, 9);
-      return shuffle([correctAnswer, ...distractors]);
-    }
-
-    function startSession(customPool = null) {
-      const pool = customPool ? shuffle(customPool) : shuffle(QUIZ_DATA).slice(0, selectedCount);
-      sessionQuestions = pool;
-      currentIdx = 0;
-      score = 0;
-      wrongItems = [];
-
-      startScreen.classList.add("hidden");
-      resultScreen.classList.add("hidden");
-      quizScreen.classList.remove("hidden");
-
-      renderQuestion();
-    }
-
-    function renderQuestion() {
-      const item = sessionQuestions[currentIdx];
-      document.getElementById("progress-text").textContent = `第 ${currentIdx + 1} / ${sessionQuestions.length} 問`;
-      document.getElementById("score-live").textContent = `正解: ${score}`;
-      document.getElementById("q-label").textContent = item.label;
-      document.getElementById("q-text").textContent = item.q;
-
-      const feedbackBox = document.getElementById("feedback-box");
-      const nextBtn = document.getElementById("next-btn");
-      feedbackBox.className = "feedback hidden";
-      feedbackBox.textContent = "";
-      nextBtn.classList.add("hidden");
-
-      const choicesBox = document.getElementById("choices-box");
-      choicesBox.innerHTML = "";
-
-      const choices = buildChoices(item.a);
-      choices.forEach(choice => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "choice-btn";
-        btn.textContent = choice;
-        btn.addEventListener("click", () => handleAnswer(btn, choice, item));
-        choicesBox.appendChild(btn);
-      });
-    }
-
-    function handleAnswer(clickedBtn, chosen, item) {
-      const allBtns = document.querySelectorAll(".choice-btn");
-      allBtns.forEach(b => (b.disabled = true));
-
-      const feedbackBox = document.getElementById("feedback-box");
-      feedbackBox.classList.remove("hidden");
-
-      if (chosen === item.a) {
-        clickedBtn.classList.add("correct");
-        score++;
-        document.getElementById("score-live").textContent = `正解: ${score}`;
-        feedbackBox.className = "feedback ok";
-        feedbackBox.textContent = `正解！「${item.a}」`;
-      } else {
-        clickedBtn.classList.add("wrong");
-        wrongItems.push({ ...item, chosen });
-        allBtns.forEach(b => {
-          if (b.textContent === item.a) {
-            b.classList.add("correct");
-          }
-        });
-        feedbackBox.className = "feedback ng";
-        feedbackBox.textContent = `不正解 — 正解は「${item.a}」`;
-      }
-
-      const nextBtn = document.getElementById("next-btn");
-      nextBtn.textContent = currentIdx + 1 < sessionQuestions.length ? "次の問題へ" : "結果を見る";
-      nextBtn.classList.remove("hidden");
-    }
-
-    function showResult() {
-      quizScreen.classList.add("hidden");
-      resultScreen.classList.remove("hidden");
-
-      document.getElementById("final-score").textContent = `${sessionQuestions.length}問中 ${score}問正解`;
-
-      const retryWrongBtn = document.getElementById("retry-wrong-btn");
-      const reviewList = document.getElementById("review-list");
-
-      if (wrongItems.length > 0) {
-        retryWrongBtn.classList.remove("hidden");
-        retryWrongBtn.textContent = `間違えた問題だけ復習する（${wrongItems.length}問）`;
-        reviewList.classList.remove("hidden");
-        reviewList.innerHTML = wrongItems
-          .map(
-            w => `
-              <div class="review-item">
-                <strong>${w.label}</strong>：${w.q}<br />
-                あなたの回答：<span style="color: var(--wrong-text);">${w.chosen}</span> ／
-                正解：<strong style="color: var(--correct-text);">${w.a}</strong>
-              </div>
-            `
-          )
-          .join("");
-      } else {
-        retryWrongBtn.classList.add("hidden");
-        reviewList.classList.add("hidden");
-        reviewList.innerHTML = "";
-      }
-    }
-
-    document.getElementById("start-btn").addEventListener("click", () => startSession());
-    document.getElementById("retry-all-btn").addEventListener("click", () => {
-      resultScreen.classList.add("hidden");
-      startScreen.classList.remove("hidden");
-    });
-    document.getElementById("retry-wrong-btn").addEventListener("click", () => {
-      startSession(wrongItems);
-    });
-    document.getElementById("next-btn").addEventListener("click", () => {
-      currentIdx++;
-      if (currentIdx < sessionQuestions.length) {
-        renderQuestion();
-      } else {
-        showResult();
-      }
-    });
-  </script>
-</body>
-</html>
+      { id: 1, q: "平安時代に最も愛好された色は？", a: "桜色" },
+      { id: 2, q: "装飾品などで特に珍重された色は？", a: "珊瑚色" },
+      { id: 3, q: "平安時代に、冬から春にかけての季節の色として愛好された色は？", a: "紅梅色" },
+      { id: 4, q: "日本の山野に自生する植物の根を原料とした染料で染めた色は？", a: "茜色" },
+      { id: 5, q: "硫化水銀を原料とする銀朱の色を表す和色名は？", a: "朱色" },
+      { id: 6, q: "英語ではブリックレッドと呼ばれる色は？", a: "煉瓦色" },
+      { id: 7, q: "大判・小判の形容にも使われた色は？", a: "山吹色" },
+      { id: 8, q: "江戸時代に身近な鳥の羽毛を表した色は？", a: "鶯色" },
+      { id: 9, q: "常緑樹であり、長寿の象徴とされた植物に関係する色は？", a: "松葉色" },
+      { id: 10, q: "平安時代には秋の季節を表していた色は？", a: "栗色" },
+      { id: 11, q: "日本画で、水酸化鉄を含む泥土から作られた色は？", a: "黄土色" },
+      { id: 12, q: "種子を粉末にして練り上げる食品の色に由来する色は？", a: "芥子色" },
+      { id: 13, q: "春に芽吹く若葉を思わせ、新鮮さや若々しさを象徴する伝統色は？", a: "萌黄" },
+      { id: 14, q: "植物の成長段階の若さを表す色は？", a: "若竹色" },
+      { id: 15, q: "平安時代には日本で「秘色」と呼ばれていたものに由来する色は？", a: "青磁色" },
+      { id: 16, q: "平安時代に用いられた、明るい藍染めの色は？", a: "浅葱色" },
+      { id: 17, q: "天候によって見え方が変わり、晴天時の空を表す色は？", a: "空色" },
+      { id: 18, q: "人類最古の植物染料の一つとされた色は？", a: "藍色" },
+      { id: 19, q: "古代インドや中国で珍重され、仏教において七宝の一つに数えられるものに由来する色は？", a: "瑠璃色" },
+      { id: 20, q: "初夏に咲くアヤメ科に由来する色は？", a: "杜若色" },
+      { id: 21, q: "旧暦の初秋の気配を感じさせる色は？", a: "桔梗色" },
+      { id: 22, q: "藍銅鉱という鉱物を原料とする、日本画の代表的な絵の具の色は？", a:
