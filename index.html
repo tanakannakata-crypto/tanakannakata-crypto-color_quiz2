@@ -30,7 +30,7 @@
       background-color: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 16px;
+      padding: 12px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -43,27 +43,27 @@
       background: var(--card);
       border-radius: 14px;
       box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-      padding: 24px;
+      padding: 18px;
     }
 
     h1 {
-      font-size: 1.35rem;
-      margin: 0 0 16px;
-      padding-bottom: 12px;
+      font-size: 1.25rem;
+      margin: 0 0 14px;
+      padding-bottom: 10px;
       border-bottom: 2px solid #e2e8f0;
       text-align: center;
     }
 
     .setup-group {
-      margin: 20px 0;
+      margin: 18px 0;
       text-align: center;
     }
 
     .setup-label {
       display: block;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .count-options {
@@ -80,7 +80,7 @@
       color: var(--text);
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
     }
 
@@ -93,12 +93,12 @@
     .primary-btn {
       display: inline-block;
       width: 100%;
-      padding: 14px 20px;
+      padding: 12px 18px;
       border: none;
       border-radius: 10px;
       background: var(--primary);
       color: #fff;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       transition: background 0.15s ease;
@@ -111,15 +111,15 @@
     .secondary-btn {
       display: inline-block;
       width: 100%;
-      padding: 12px 18px;
+      padding: 11px 16px;
       border: 1.5px solid var(--border);
       border-radius: 10px;
       background: #fff;
       color: var(--text);
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .secondary-btn:hover {
@@ -130,9 +130,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--muted);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
       gap: 8px;
     }
 
@@ -140,50 +140,48 @@
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 18px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
     }
 
     .q-num {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: var(--primary);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .q-text {
-      font-size: 1.08rem;
-      line-height: 1.65;
+      font-size: 0.98rem;
+      line-height: 1.5;
       font-weight: 600;
       margin: 0;
     }
 
+    /* 常に横2列×縦5行（10択）で表示 */
     .choices {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    @media (max-width: 560px) {
-      .container {
-        padding: 18px;
-      }
-      .choices {
-        grid-template-columns: 1fr;
-      }
+      gap: 7px;
     }
 
     .choice-btn {
-      padding: 12px 14px;
+      padding: 9px 10px;
       border: 1.5px solid var(--border);
-      border-radius: 9px;
+      border-radius: 8px;
       background: #fff;
       color: var(--text);
-      font-size: 0.98rem;
-      text-align: left;
+      font-size: 0.86rem;
+      text-align: center;
       cursor: pointer;
       transition: border-color 0.15s ease, background 0.15s ease;
-      line-height: 1.4;
+      line-height: 1.25;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
     }
 
     .choice-btn:hover:not(:disabled) {
@@ -209,12 +207,13 @@
     }
 
     .feedback {
-      margin-top: 16px;
-      padding: 12px 14px;
+      margin-top: 10px;
+      padding: 9px 12px;
       border-radius: 8px;
+      font-size: 0.92rem;
       font-weight: 700;
       text-align: center;
-      min-height: 44px;
+      min-height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -231,31 +230,31 @@
     }
 
     .next-wrap {
-      margin-top: 14px;
+      margin-top: 10px;
     }
 
     .score-big {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 800;
       color: var(--primary);
       text-align: center;
-      margin: 16px 0;
+      margin: 14px 0;
     }
 
     .review-list {
-      margin-top: 20px;
+      margin-top: 16px;
       text-align: left;
       border-top: 1px solid #e2e8f0;
-      padding-top: 14px;
+      padding-top: 12px;
     }
 
     .review-item {
-      padding: 10px 12px;
+      padding: 9px 11px;
       border-radius: 8px;
       background: #f8fafc;
       margin-bottom: 8px;
-      font-size: 0.92rem;
-      line-height: 1.5;
+      font-size: 0.88rem;
+      line-height: 1.45;
     }
 
     .hidden {
@@ -268,7 +267,7 @@
     <h1>色彩用語クイズ（全127問・10択）</h1>
 
     <div id="start-screen">
-      <p style="color: var(--muted); line-height: 1.7; text-align: center; margin: 0;">
+      <p style="color: var(--muted); line-height: 1.6; text-align: center; margin: 0; font-size: 0.92rem;">
         修正版・全127問の色彩用語クイズです。<br />
         出題順・選択肢順ともに毎回ランダムにシャッフルされます。
       </p>
@@ -306,7 +305,7 @@
     </div>
 
     <div id="result-screen" class="hidden">
-      <h2 style="text-align: center; margin: 8px 0 0;">結果発表</h2>
+      <h2 style="text-align: center; margin: 6px 0 0; font-size: 1.2rem;">結果発表</h2>
       <div class="score-big" id="final-score"></div>
       <button type="button" class="primary-btn" id="retry-all-btn">もう一度挑戦する</button>
       <button type="button" class="secondary-btn hidden" id="retry-wrong-btn">間違えた問題だけ復習する</button>
